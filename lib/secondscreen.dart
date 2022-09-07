@@ -108,24 +108,23 @@ class _SecondScreenState extends State<SecondScreen> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
-                color: Colors.red,
+                //color: Colors.red,
                 height: 400,
-                child: FutureBuilder(
-                  future: varInit,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasError) {
-                      return const Text('Something was worng..');
-                    }
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Text('Loading data...');
-                    }
-                    return ListView.builder(
-                        itemCount: docIds.length,
-                        itemBuilder: (context, index) {
-                          return getStudent(documentId: docIds[index]);
-                        });
-                  },
-                ),
+                child: StreamBuilder<List<Student>>(
+                    stream: readStudent(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return const Text('Something went wrong!');
+                      } else if (snapshot.hasData) {
+                        final students = snapshot.data!;
+                        return ListView(
+                            children: students.map(builderStudent).toList());
+                      } else {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                    }),
               ),
             ),
           ],
@@ -133,4 +132,44 @@ class _SecondScreenState extends State<SecondScreen> {
       ),
     );
   }
+
+  Widget builderStudent(Student student) => Card(
+        child: Row(
+          children: [
+            Text(student.id),
+            Text(student.name),
+            Text(student.gender),
+            Text(student.score),
+          ],
+        ),
+      );
+  Stream<List<Student>> readStudent() => FirebaseFirestore.instance
+      .collection('student')
+      .snapshots()
+      .map((snapshot) =>
+          snapshot.docs.map((doc) => Student.fromJson(doc.data())).toList());
+}
+
+class Student {
+  String id;
+  final String name;
+  final String gender;
+  final String score;
+  Student({
+    this.id = '',
+    required this.name,
+    required this.gender,
+    required this.score,
+  });
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'name': name,
+        'gender': gender,
+        'score': score,
+      };
+  static Student fromJson(Map<String, dynamic> json) => Student(
+      id: json['id'],
+      name: json['name'],
+      gender: json['gender'],
+      score: json['score']);
 }
