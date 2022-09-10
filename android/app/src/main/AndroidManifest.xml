@@ -3,7 +3,8 @@
    <application
         android:label="firebase_read_write"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:name="android.permission.ACCESS_NETWORK_STATE">
         <activity
             android:name=".MainActivity"
             android:exported="true"

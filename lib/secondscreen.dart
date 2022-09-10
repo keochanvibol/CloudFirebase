@@ -12,21 +12,16 @@ class SecondScreen extends StatefulWidget {
 
 class _SecondScreenState extends State<SecondScreen> {
   TextEditingController nameController = TextEditingController();
-
   TextEditingController genderController = TextEditingController();
-
   TextEditingController scoreController = TextEditingController();
   List<String> docIds = [];
   Future getDocId() async {
-    await FirebaseFirestore.instance
-        .collection('student')
-        .get()
-        .then((value) => value.docs.forEach((DocumentSnapshot document) {
-              setState(() {
-                print('ID = ${document.reference.id}');
-                docIds.add(document.reference.id);
-              });
-            }));
+    await FirebaseFirestore.instance.collection('student').get().then((value) {
+      value.docs.forEach((DocumentSnapshot document) {
+        docIds.add(document.reference.id);
+        print('ID: ${document.reference.id}');
+      });
+    });
   }
 
   var varInit;
@@ -86,7 +81,12 @@ class _SecondScreenState extends State<SecondScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 ElevatedButton(
-                    onPressed: () async {},
+                    onPressed: () async {
+                      final student = Student(
+                          name: nameController.text,
+                          gender: genderController.text,
+                          score: scoreController.text);
+                    },
                     child: const SizedBox(
                         height: 45,
                         width: 80,
@@ -110,21 +110,42 @@ class _SecondScreenState extends State<SecondScreen> {
               child: Container(
                 //color: Colors.red,
                 height: 400,
-                child: StreamBuilder<List<Student>>(
-                    stream: readStudent(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return const Text('Something went wrong!');
-                      } else if (snapshot.hasData) {
-                        final students = snapshot.data!;
-                        return ListView(
-                            children: students.map(builderStudent).toList());
-                      } else {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                    }),
+                child: FutureBuilder(
+                  future: varInit,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return const Center(
+                        child: Text('Somthing wrong...!'),
+                      );
+                    }
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: Text('Loading...'),
+                      );
+                    }
+                    return ListView.builder(
+                      itemCount: docIds.length,
+                      itemBuilder: (context, index) {
+                        return getStudent(documentId: docIds[index]);
+                      },
+                    );
+                  },
+                ),
+                // StreamBuilder<List<Student>>(
+                //     stream: readStudent(),
+                //     builder: (context, snapshot) {
+                //       if (snapshot.hasError) {
+                //         return Text('Something went wrong! ${snapshot.error}');
+                //       } else if (snapshot.hasData) {
+                //         final students = snapshot.data!;
+                //         return ListView(
+                //             children: students.map(builderStudent).toList());
+                //       } else {
+                //         return Center(
+                //           child: CircularProgressIndicator(),
+                //         );
+                //       }
+                //     }),
               ),
             ),
           ],

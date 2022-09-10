@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "217858919537",
-    "project_id": "fir-app-1a038",
-    "storage_bucket": "fir-app-1a038.appspot.com"
+    "project_number": "262689061784",
+    "project_id": "fir-readwrite-31990",
+    "storage_bucket": "fir-readwrite-31990.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:217858919537:android:c2035ebbcf47783f021fd0",
+        "mobilesdk_app_id": "1:262689061784:android:e6dc250a84150ca89209ed",
         "android_client_info": {
           "package_name": "com.example.firebase_read_write"
         }
       },
       "oauth_client": [
         {
-          "client_id": "217858919537-2q92fmiiube03js8im0dq4gr9j6s2bhg.apps.googleusercontent.com",
+          "client_id": "262689061784-v1le6s9mb2oh2psva7u1jve1p3sjjuo4.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCJeoxX9lW9DPSV244pAyFZerUU-dijOp8"
+          "current_key": "AIzaSyDtoGB9YvdxqEp7YWc1-wnPb3dqCLZ7LdI"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "217858919537-2q92fmiiube03js8im0dq4gr9j6s2bhg.apps.googleusercontent.com",
+              "client_id": "262689061784-v1le6s9mb2oh2psva7u1jve1p3sjjuo4.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
